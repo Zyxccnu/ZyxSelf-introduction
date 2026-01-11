@@ -24,6 +24,7 @@
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
             position: relative;
+            cursor: url('Resource/Cursor.png'), auto;
         }
 
         /* 滚动条 */
@@ -1567,6 +1568,11 @@
                             <span class="social-label">Phone</span>
                             <a href="tel:17757727450" class="social-link">📞 17757727450</a>
                         </div>
+                        <div class="social-item">
+                            <img src="Resource/AppIconReference/Steam.png" alt="Steam" class="social-icon">
+                            <span class="social-label">Steam</span>
+                            <a href="https://steamcommunity.com/profiles/76561199026745818/" target="_blank" class="social-link">🎮 访问个人库</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1631,6 +1637,133 @@
                 }
             });
         });
+
+        // 鼠标流光拖尾和点击粒子效果
+        const particleContainer = document.createElement('div');
+        particleContainer.id = 'particle-container';
+        particleContainer.style.position = 'fixed';
+        particleContainer.style.top = '0';
+        particleContainer.style.left = '0';
+        particleContainer.style.width = '100%';
+        particleContainer.style.height = '100%';
+        particleContainer.style.pointerEvents = 'none';
+        particleContainer.style.zIndex = '9999';
+        document.body.appendChild(particleContainer);
+
+        // 鼠标移动时的流光拖尾
+        document.addEventListener('mousemove', (e) => {
+            // 每次移动都创建流光，使其更连续
+            createGlowTrail(e.clientX, e.clientY);
+        });
+
+        // 鼠标点击时的粒子溅射
+        document.addEventListener('click', (e) => {
+            // 创建多个粒子
+            for (let i = 0; i < 12; i++) {
+                createSplashParticle(e.clientX, e.clientY);
+            }
+        });
+
+        // 流光拖尾效果（鼠标移动）
+        function createGlowTrail(x, y) {
+            const trail = document.createElement('div');
+            trail.style.position = 'fixed';
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            trail.style.width = '3px';
+            trail.style.height = '3px';
+            trail.style.borderRadius = '50%';
+            trail.style.pointerEvents = 'none';
+            trail.style.zIndex = '9999';
+            
+            // 流光颜色（纯青色，更细腻）
+            const colors = ['#22d3ee', '#00ffff', '#4dd9ff'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            trail.style.background = color;
+            trail.style.boxShadow = `0 0 6px ${color}, 0 0 12px ${color}`;
+            
+            particleContainer.appendChild(trail);
+            
+            // 流光动画（更短的持续时间，快速消失）
+            let opacity = 1;
+            let lifetime = 0;
+            const duration = 20;
+            
+            const animate = () => {
+                lifetime++;
+                opacity = 1 - (lifetime / duration);
+                
+                trail.style.opacity = opacity;
+                
+                if (lifetime < duration) {
+                    requestAnimationFrame(animate);
+                } else {
+                    trail.remove();
+                }
+            };
+            
+            animate();
+        }
+
+        // 粒子溅射效果（鼠标点击）
+        function createSplashParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.width = '8px';
+            particle.style.height = '8px';
+            particle.style.borderRadius = '50%';
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '9999';
+            
+            // 粒子颜色（更亮的青色）
+            const colors = ['#22d3ee', '#4dd9ff', '#00ffff'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.background = color;
+            particle.style.boxShadow = `0 0 12px ${color}, 0 0 25px ${color}`;
+            
+            // 均匀向外溅射的速度
+            const angle = (Math.PI * 2 / 12) * Math.floor(Math.random() * 12);
+            const speed = 4 + Math.random() * 3;
+            const velocity = {
+                x: Math.cos(angle) * speed,
+                y: Math.sin(angle) * speed
+            };
+            
+            particleContainer.appendChild(particle);
+            
+            // 粒子动画
+            let opacity = 1;
+            let scale = 1;
+            let posX = x;
+            let posY = y;
+            let lifetime = 0;
+            const duration = 50;
+            
+            const animate = () => {
+                lifetime++;
+                opacity = 1 - (lifetime / duration);
+                scale = 1 - (lifetime / duration) * 0.8;
+                
+                posX += velocity.x;
+                posY += velocity.y;
+                velocity.y += 0.15; // 重力效果
+                
+                particle.style.left = posX + 'px';
+                particle.style.top = posY + 'px';
+                particle.style.opacity = opacity;
+                particle.style.transform = `scale(${scale})`;
+                
+                if (lifetime < duration) {
+                    requestAnimationFrame(animate);
+                } else {
+                    particle.remove();
+                }
+            };
+            
+            animate();;
+        }
     </script>
 </body>
 </html>
