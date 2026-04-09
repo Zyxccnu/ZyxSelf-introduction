@@ -613,26 +613,174 @@
             font-size: 0.95rem;
         }
 
-        /* Skills Card */
-        .skills-card { display: flex; flex-direction: column; gap: 1.5rem; }
-        .skill-group h4 {
-            color: var(--text-main);
-            margin-bottom: 0.8rem;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.14em;
-            position: relative;
-            padding-bottom: 0.45rem;
+        /* Neural Graph Styles */
+        .skills-layout {
+            display: flex;
+            gap: 1rem;
+            height: 480px;
         }
-        .skill-group h4::after {
-            content: '';
+        .physics-arena {
+            flex: 1;
+            position: relative;
+            background: rgba(10, 15, 25, 0.4);
+            border: 1px solid rgba(103, 177, 213, 0.15);
+            overflow: hidden;
+            clip-path: polygon(1% 0, 100% 0, 99% 100%, 0 100%);
+            border-radius: 4px;
+            cursor: grab;
+            min-height: 0;
+        }
+        .physics-arena.dragging {
+            cursor: grabbing;
+        }
+        .neural-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .neural-line {
+            stroke: var(--accent);
+            stroke-width: 1.5;
+            opacity: 0.3;
+            stroke-dasharray: 4 4;
+            animation: p5r-line-flow 20s linear infinite;
+        }
+        .neural-line.active {
+            stroke-width: 3;
+            opacity: 0.8;
+            stroke: var(--accent-warm);
+            stroke-dasharray: none;
+            animation: none;
+        }
+        @keyframes p5r-line-flow {
+            to { stroke-dashoffset: -100; }
+        }
+        .arena-nodes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+        .neural-node {
+            position: absolute;
+            transform: translate(-50%, -50%) skewX(-4deg);
+            background: rgba(26, 43, 60, 0.9);
+            border: 2px solid var(--node-color, var(--accent));
+            padding: 0.4rem 0.8rem;
+            border-radius: 2px;
+            color: var(--text-main);
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            cursor: grab;
+            user-select: none;
+            touch-action: none;
+            clip-path: polygon(8% 0, 100% 0, 92% 100%, 0 100%);
+            transition: background 0.2s, box-shadow 0.2s, border-color 0.2s, color 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            white-space: nowrap;
+            will-change: left, top;
+        }
+        .neural-node.dragging {
+            cursor: grabbing;
+            z-index: 10;
+        }
+        .neural-node.selected {
+            background: var(--node-color, var(--accent));
+            color: var(--bg-dark);
+            box-shadow: 0 0 18px var(--node-color, var(--accent));
+            z-index: 9;
+        }
+        .neural-node-icon {
+            width: 1.2rem;
+            height: 1.2rem;
+            flex-shrink: 0;
+        }
+        .skill-detail-panel {
+            width: 300px;
+            flex-shrink: 0;
+            background: rgba(15, 22, 33, 0.95);
+            border: 2px solid var(--accent);
+            border-left: 4px solid var(--accent-warm);
+            padding: 1.5rem;
+            border-radius: 2px;
+            clip-path: polygon(0 0, 100% 0, 98% 100%, 0 100%);
+            overflow-y: auto;
+            backdrop-filter: blur(8px);
+        }
+        .detail-placeholder {
+            height: 100%;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--text-muted);
+            gap: 0.9rem;
+        }
+        .detail-placeholder-icon {
+            color: var(--accent);
+            font-size: 2rem;
+            line-height: 1;
+            text-shadow: 0 0 12px rgba(103, 177, 213, 0.28);
+        }
+        .detail-placeholder p {
+            margin: 0;
+            line-height: 1.7;
+        }
+        .detail-content h3 {
+            color: var(--accent-warm);
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid rgba(224, 145, 122, 0.3);
+            padding-bottom: 0.4rem;
+        }
+        .detail-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+        .detail-content li {
+            font-size: 0.85rem;
+            line-height: 1.45;
+            position: relative;
+            padding-left: 1rem;
+            color: var(--text-muted);
+        }
+        .detail-content li::before {
+            content: '▸';
             position: absolute;
             left: 0;
-            bottom: 0;
-            width: 6rem;
-            height: 2px;
-            background: linear-gradient(90deg, var(--accent), transparent);
-            transform: skewX(-26deg);
+            color: var(--accent);
+        }
+        @media (max-width: 768px) {
+            .skills-layout {
+                flex-direction: column;
+                height: auto;
+            }
+            .physics-arena {
+                min-height: 280px;
+            }
+            .neural-node { font-size: 0.75rem; padding: 0.3rem 0.6rem; }
+            .neural-node-icon { width: 1rem; height: 1rem; }
+            .skill-detail-panel {
+                width: 100%;
+                height: 200px;
+            }
         }
         .skill-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
         .skill-tag {
@@ -887,11 +1035,25 @@
         }
         .p5r-bottom-status.scanning .panel-dot { animation: pulse 1s infinite; }
         .p5r-bottom-hint {
-            color: var(--accent);
-            font-size: 0.82rem;
-            letter-spacing: 0.08em;
+            color: var(--accent-warm);
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            margin-left: auto;
+            text-align: center;
+            padding: 0.5rem 1.2rem;
+            background: rgba(224, 145, 122, 0.12);
+            border: 2px solid var(--accent-warm);
+            clip-path: polygon(3% 0, 100% 0, 97% 100%, 0 100%);
+            animation: hint-bounce 1.2s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite;
+            cursor: pointer;
+        }
+        @keyframes hint-bounce {
+            0%, 100% { transform: translateY(0) skewX(-2deg); }
+            20% { transform: translateY(-6px) skewX(-2deg); }
+            40% { transform: translateY(0) skewX(-2deg); }
+            55% { transform: translateY(-3px) skewX(-2deg); }
+            70% { transform: translateY(0) skewX(-2deg); }
         }
 
         .p5r-entry {
@@ -1567,47 +1729,20 @@
                 <!-- Skills Card -->
                 <div class="bento-card span-4 skills-card" id="skills" data-animate>
                     <h2 class="card-title">✦ 开发技能 SKILLS</h2>
-                    <div class="skill-group">
-                        <h4>核心能力</h4>
-                        <div class="skill-tags">
-                            <span class="skill-tag">Unity 3D/2D</span>
-                            <span class="skill-tag">UE5</span>
-                            <span class="skill-tag">C#</span>
-                            <span class="skill-tag">C++ STL</span>
-                            <span class="skill-tag">Delegates</span>
-                            <span class="skill-tag">Coroutines</span>
-                            <span class="skill-tag">Reflection</span>
-                            <span class="skill-tag">Blueprint</span>
+                    <div class="skills-layout">
+                        <div class="physics-arena" id="physicsArena">
+                            <svg class="neural-lines" id="neuralLines" aria-label="技能连接图谱"><title>技能连接图谱</title></svg>
+                            <div class="arena-nodes" id="arenaNodes"></div>
                         </div>
-                    </div>
-                    <div class="skill-group">
-                        <h4>游戏开发</h4>
-                        <div class="skill-tags">
-                            <span class="skill-tag">Game Mechanics</span>
-                            <span class="skill-tag">关卡设计</span>
-                            <span class="skill-tag">3C系统</span>
-                            <span class="skill-tag">Gameplay Systems</span>
-                            <span class="skill-tag">UI Toolkit</span>
-                            <span class="skill-tag">Blender</span>
-                        </div>
-                    </div>
-                    <div class="skill-group">
-                        <h4>策划能力</h4>
-                        <div class="skill-tags">
-                            <span class="skill-tag">策划文档</span>
-                            <span class="skill-tag">需求分析</span>
-                            <span class="skill-tag">原型验证</span>
-                            <span class="skill-tag">数值平衡</span>
-                            <span class="skill-tag">玩家体验分析</span>
-                        </div>
-                    </div>
-                    <div class="skill-group">
-                        <h4>通用技能</h4>
-                        <div class="skill-tags">
-                            <span class="skill-tag">Git/SCM</span>
-                            <span class="skill-tag">Project Manage</span>
-                            <span class="skill-tag">AI 协同开发</span>
-                            <span class="skill-tag">美术素材分析</span>
+                        <div class="skill-detail-panel" id="skillDetailPanel">
+                            <div class="detail-placeholder">
+                                <span class="detail-placeholder-icon">◈</span>
+                                <p>单击任意技能节点<br>查看详细信息</p>
+                            </div>
+                            <div class="detail-content" id="detailContent" style="display:none;">
+                                <h3 id="detailTitle"></h3>
+                                <ul id="detailList"></ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1617,116 +1752,8 @@
                     <h2 class="card-title" style="justify-content: center; font-size: 2rem;">✦ 我的项目 PROJECTS ✦</h2>
                 </div>
 
-                <div class="bento-card span-2 row-span-2 project-card" data-animate data-project="aurora-academy" style="background: linear-gradient(135deg, rgba(103,177,213,0.2), rgba(36,58,77,0.8));">
-                    <div class="project-content">
-                        <div class="project-role">玩法设计 &amp; 全部程序开发</div>
-                        <h3 style="font-size: 1.8rem; margin-bottom: 0.5rem;">极光学院战</h3>
-                        <p style="color: var(--accent); font-size: 0.9rem;">Aurora Academy</p>
-                        <div class="project-desc">学生团队独立游戏项目，约 7 人团队，原型阶段。作为唯一程序，开发了对话编辑器、投掷物配置系统等工具链。</div>
-                        <div class="skill-tags" style="margin-top: 1rem;">
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">Unity</span>
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">C#</span>
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">Tool Dev</span>
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">Team of 7</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://my.feishu.cn/wiki/JIq2wZKd5iiHBEklehPc2YnbnWd" target="_blank" class="project-link">📄 文档</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bento-card span-2 project-card project-1" data-animate data-project="zhongming">
-                    <div class="project-content">
-                        <div class="project-role">全部程序开发 &amp; 玩法、关卡策划</div>
-                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">钟鸣九州</h3>
-                        <p style="color: var(--accent); font-size: 0.9rem;">Bell Ring Over World</p>
-                        <div class="project-desc">2025中国大学生计算机设计大赛。五人团队(3美术1音效)，负责全部程序开发及玩法、关卡策划。获省二等奖。</div>
-                        <div class="skill-tags" style="margin-top: 1rem;">
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">Unity</span>
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">C#</span>
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">声波物理</span>
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">5人团队</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="javascript:void(0)" class="project-link play-video" data-video="0">📹 视频</a>
-                            <a href="https://zyxccnu.itch.io/bell-ring-over-world" target="_blank" class="project-link">🎮 Demo</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bento-card span-2 project-card project-3" data-animate data-project="guzhang">
-                    <div class="project-content">
-                        <div class="project-role">程序、机制设计、关卡设计及运营</div>
-                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">故障回放</h3>
-                        <p style="color: var(--accent); font-size: 0.9rem;">Fault Playback</p>
-                        <div class="project-desc">2025 TapTap 聚光灯21天挑战赛。三人团队(1策划1技美)，负责程序、机制设计、关卡设计及运营。入围前30提名奖。</div>
-                        <div class="skill-tags" style="margin-top: 1rem;">
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">Unity</span>
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">C#</span>
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">时间机制</span>
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">3人团队</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="javascript:void(0)" class="project-link play-video" data-video="2">📹 视频</a>
-                            <a href="https://www.taptap.cn/app/781805?os=pc" target="_blank" class="project-link">🎮 游玩</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bento-card span-2 project-card" data-animate data-project="fps-demo" style="background: linear-gradient(135deg, rgba(224,145,122,0.2), rgba(36,58,77,0.8));">
-                    <div class="project-content">
-                        <div class="project-role">全部开发</div>
-                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">FPS 多人联机 Demo</h3>
-                        <p style="color: var(--accent); font-size: 0.9rem;">Network FPS Demo</p>
-                        <div class="project-desc">腾讯开局一课游戏客户端大作业。基于UE5实现完整多人FPS，含大厅系统、武器系统、AI行为树、网络同步。</div>
-                        <div class="skill-tags" style="margin-top: 1rem;">
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">UE5</span>
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">Blueprint</span>
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">Multiplayer</span>
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">AI</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://my.feishu.cn/wiki/F7OEwssS6iVzMAkEpSLcbQDsnNe" target="_blank" class="project-link">📄 文档</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bento-card span-2 project-card project-2" data-animate data-project="xiuzhi">
-                    <div class="project-content">
-                        <div class="project-role">玩法策划 &amp; 全部程序实现</div>
-                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">休止铃</h3>
-                        <p style="color: var(--accent); font-size: 0.9rem;">Rest Bell</p>
-                        <div class="project-desc">2025 TapTap 武汉聚光灯 48h GameJam。五人团队(2美术1策划1音效)，负责玩法策划和全部程序实现。</div>
-                        <div class="skill-tags" style="margin-top: 1rem;">
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">Unity</span>
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">GameJam</span>
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">48h</span>
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">5人团队</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="javascript:void(0)" class="project-link play-video" data-video="1">📹 视频</a>
-                            <a href="https://zyxccnu.itch.io/restbell" target="_blank" class="project-link">🎮 游玩</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bento-card span-2 project-card" data-animate data-project="mask-beast" style="background: linear-gradient(135deg, rgba(212,168,160,0.2), rgba(36,58,77,0.8));">
-                    <div class="project-content">
-                        <div class="project-role">玩法策划 &amp; 部分程序</div>
-                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">面具困兽</h3>
-                        <p style="color: var(--accent); font-size: 0.9rem;">Mask Beast</p>
-                        <div class="project-desc">2026 Global Game Jam 武汉微派场 48h 开发。五人团队(1美术1策划1音效1程序)。</div>
-                        <div class="skill-tags" style="margin-top: 1rem;">
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">Unity</span>
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">GGJ</span>
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">48h</span>
-                            <span class="skill-tag" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">5人团队</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://www.gmhub.com/game/9316" target="_blank" class="project-link">🎮 游玩</a>
-                        </div>
-                    </div>
-                </div>
+                <!-- Project cards rendered dynamically from PROJECT_DATA -->
+                <div id="projectCardsContainer"></div>
 
                 <div class="bento-card span-4 video-card" data-animate>
                     <h2 class="card-title" style="margin-bottom: 0.5rem;">✦ 项目演示</h2>
@@ -1814,6 +1841,8 @@
 
 
     <script src="data/projects.js"></script>
+    <script src="data/skills.js"></script>
+    <script src="data/cat-dialogues.js"></script>
 
     <!-- TODO: Particle Container -->
 
@@ -1872,31 +1901,91 @@
         const videoPlayer = document.getElementById('videoPlayer');
         const videoPlaceholder = document.getElementById('videoPlaceholder');
         const videoUrls = [
-            '//player.bilibili.com/player.html?isOutside=true&aid=114493510196089&bvid=BV1QbE7zwELP&cid=29920201803&p=1',
-            '//player.bilibili.com/player.html?isOutside=true&aid=115331196526422&bvid=BV1WnxDzwESc&cid=32893306844&p=1',
-            '//player.bilibili.com/player.html?isOutside=true&aid=115473265990933&bvid=BV17F15BUEZv&cid=33587726479&p=1'
+            '//player.bilibili.com/player.html?isOutside=true&aid=114493510196089&bvid=BV1QbE7zwELP&cid=29920201803&p=1',  // 0: 钟鸣九州
+            '//player.bilibili.com/player.html?isOutside=true&aid=115331196526422&bvid=BV1WnxDzwESc&cid=32893306844&p=1',  // 1: 休止铃
+            '//player.bilibili.com/player.html?isOutside=true&aid=115473265990933&bvid=BV17F15BUEZv&cid=33587726479&p=1',  // 2: 故障回放
+            '//player.bilibili.com/player.html?isOutside=true&aid=116017384659518&bvid=BV1ESFazuEoa&cid=35837971840&p=1',  // 3: FPS Demo
+            '//player.bilibili.com/player.html?isOutside=true&aid=115996228590264&bvid=BV1PQ6tBXEoB&cid=35819949045&p=1',  // 4: 面具困兽
         ];
 
-        document.querySelectorAll('.play-video').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                const index = this.getAttribute('data-video');
-                if (index !== null && videoUrls[index]) {
-                    videoPlayer.src = videoUrls[index];
-                    videoPlaceholder.style.opacity = '0';
-                    setTimeout(() => videoPlaceholder.style.display = 'none', 300);
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('.play-video');
+            if (!btn) return;
+            e.preventDefault();
+            e.stopPropagation();
+            const index = btn.getAttribute('data-video');
+            if (index !== null && videoUrls[index]) {
+                videoPlayer.src = videoUrls[index];
+                videoPlaceholder.style.opacity = '0';
+                setTimeout(() => videoPlaceholder.style.display = 'none', 300);
 
-                    document.querySelector('.video-card').scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center'
-                    });
-                }
-            });
+                document.querySelector('.video-card').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
         });
 
         const projectData = typeof PROJECT_DATA !== 'undefined' ? PROJECT_DATA : {};
+
+        // Dynamically render project cards from PROJECT_DATA
+        (function renderProjectCards() {
+            const container = document.getElementById('projectCardsContainer');
+            if (!container || !projectData) return;
+            const grid = container.parentElement; // bento-grid
+            const projectOrder = ['aurora-academy', 'zhongming', 'guzhang', 'fps-demo', 'xiuzhi', 'mask-beast'];
+            projectOrder.forEach(id => {
+                const p = projectData[id];
+                if (!p) return;
+                const spanClass = p.span || '2';
+                const hasCover = p.cover && p.cover.length > 0;
+                const bgStyle = hasCover
+                    ? `background: url('${p.cover}') center/cover;`
+                    : `background: linear-gradient(135deg, rgba(224,145,122,0.2), rgba(36,58,77,0.8));`;
+                const fontSize = spanClass.includes('row-span-2') ? '1.8rem' : '1.5rem';
+                const tagsHtml = (p.tags || []).map(t =>
+                    `<span class="skill-tag" style="padding:0.2rem 0.6rem;font-size:0.75rem;">${t}</span>`
+                ).join('');
+                const linksHtml = (p.links || []).map(link => {
+                    if (link.type === 'video') {
+                        return `<a href="javascript:void(0)" class="project-link play-video" data-video="${link.videoIndex}">${link.label}</a>`;
+                    } else {
+                        return `<a href="${link.url}" target="_blank" class="project-link">${link.label}</a>`;
+                    }
+                }).join('');
+                const card = document.createElement('div');
+                card.className = `bento-card span-${spanClass} project-card`;
+                card.setAttribute('data-animate', '');
+                card.setAttribute('data-project', id);
+                card.style.cssText = bgStyle;
+                card.innerHTML = `
+                    <div class="project-content">
+                        <div class="project-role">${p.role || ''}</div>
+                        <h3 style="font-size:${fontSize};margin-bottom:0.5rem;">${p.name}</h3>
+                        <p style="color:var(--accent);font-size:0.9rem;">${p.nameEn || ''}</p>
+                        <div class="project-desc">${p.desc || ''}</div>
+                        <div class="skill-tags" style="margin-top:1rem;">${tagsHtml}</div>
+                        <div class="project-links">${linksHtml}</div>
+                    </div>
+                `;
+                grid.insertBefore(card, container);
+            });
+            container.remove();
+        })();
+
         const projectCards = document.querySelectorAll('.project-card[data-project]');
+
+        // Register dynamically created project cards with the scroll observer
+        projectCards.forEach((el, index) => {
+            const fromLeft = index % 2 === 0;
+            el.style.setProperty('--entry-x', fromLeft ? '-84px' : '84px');
+            el.style.setProperty('--entry-skew', fromLeft ? '-8deg' : '8deg');
+            el.style.setProperty('--entry-delay', '0ms');
+            const cardIndex = bentoCards.length + index;
+            el.style.setProperty('--idle-delay', `${cardIndex * 180}ms`);
+            bentoCards.push(el);
+            observer.observe(el);
+        });
         
         let panelRunId = 0;
         let panelFrameId = null;
@@ -2114,8 +2203,15 @@
                 <div class="p5r-bottom-kicker">PROJECT DATABASE</div>
                 <div class="p5r-bottom-title">${title.textContent}</div>
                 <div class="p5r-bottom-status scanning"><span class="panel-dot"></span> scanning...</div>
-                <div class="p5r-bottom-hint">双击查看完整文档 →</div>
             `;
+
+            const topHint = document.createElement('div');
+            topHint.className = 'p5r-bottom-hint';
+            topHint.textContent = '双击画面查看完整文档 →';
+            topHint.style.cssText = 'position:absolute;top:1.5rem;left:0;right:0;margin:0 auto;width:fit-content;z-index:100;';
+            topHint.addEventListener('click', () => {
+                if (project.docUrl) window.open(project.docUrl, '_blank', 'noopener');
+            });
 
             const closeBtn = document.createElement('div');
             closeBtn.className = 'p5r-close-btn';
@@ -2127,6 +2223,7 @@
             overlay.appendChild(rightPanel);
             overlay.appendChild(bottomBar);
             overlay.appendChild(closeBtn);
+            if (project.docUrl) overlay.appendChild(topHint);
 
             document.body.appendChild(overlay);
             currentModal = overlay;
@@ -2274,6 +2371,495 @@
                 navLinks.classList.remove('active');
             });
         });
+
+        // === Physics Bumper-Car Neural Graph ===
+        (() => {
+            const skillsCard = document.getElementById('skills');
+            const arena = document.getElementById('physicsArena');
+            const linesSvg = document.getElementById('neuralLines');
+            const nodesContainer = document.getElementById('arenaNodes');
+            const detailPanel = document.getElementById('skillDetailPanel');
+            const detailPlaceholder = detailPanel ? detailPanel.querySelector('.detail-placeholder') : null;
+            const detailContent = document.getElementById('detailContent');
+            const detailTitle = document.getElementById('detailTitle');
+            const detailList = document.getElementById('detailList');
+            if (!skillsCard || !arena || !linesSvg || !nodesContainer || !detailPanel || !detailPlaceholder || !detailContent || !detailTitle || !detailList || typeof SKILL_DATA === 'undefined') return;
+
+            const nodesData = SKILL_DATA.nodes || [];
+            const layout = {
+                'unity-csharp': { x: 50, y: 45 },
+                'ue5': { x: 20, y: 25 },
+                'render-pipeline': { x: 80, y: 25 },
+                'blender': { x: 90, y: 55 },
+                'directing': { x: 80, y: 80 },
+                'action-system': { x: 35, y: 20 },
+                'network': { x: 15, y: 60 },
+                'architecture': { x: 45, y: 75 },
+                'performance': { x: 65, y: 55 },
+                'audio': { x: 55, y: 90 }
+            };
+
+            const RESTITUTION = 0.5;
+            const DAMPING = 0.94;
+            const REST_LENGTH = 180;
+            const MIN_DISTANCE = 80;
+            const SPRING_K = 0.003;
+            const REPULSION_K = 0.5;
+            const DRAG_SPRING_K = 0.25;
+            const CLICK_THRESHOLD = 5;
+
+            const nodeBodies = new Map();
+            const lineEntries = [];
+            const state = {
+                width: 0,
+                height: 0,
+                visible: false,
+                running: false,
+                rafId: 0,
+                lastTime: 0,
+                selectedId: null,
+                dragging: null
+            };
+
+            function createNodeMarkup(node) {
+                return `<img class="neural-node-icon" src="${node.icon}" alt="" /><span>${node.label}</span>`;
+            }
+
+            function buildGraph() {
+                const fragment = document.createDocumentFragment();
+
+                nodesData.forEach((node) => {
+                    const el = document.createElement('div');
+                    el.className = 'neural-node';
+                    el.style.setProperty('--node-color', node.color);
+                    el.dataset.id = node.id;
+                    el.innerHTML = createNodeMarkup(node);
+                    el.addEventListener('pointerdown', handlePointerDown);
+                    fragment.appendChild(el);
+
+                    nodeBodies.set(node.id, {
+                        id: node.id,
+                        data: node,
+                        el,
+                        x: 0,
+                        y: 0,
+                        vx: 0,
+                        vy: 0,
+                        width: 0,
+                        height: 0,
+                        initialized: false
+                    });
+                });
+
+                nodesContainer.appendChild(fragment);
+                buildLines();
+                measureArena(true);
+                renderSelection();
+            }
+
+            function buildLines() {
+                const drawnPairs = new Set();
+                linesSvg.innerHTML = '';
+                lineEntries.length = 0;
+
+                nodesData.forEach((node) => {
+                    (node.connections || []).forEach((targetId) => {
+                        if (!nodeBodies.has(targetId)) return;
+
+                        const pairKey = [node.id, targetId].sort().join('::');
+                        if (drawnPairs.has(pairKey)) return;
+                        drawnPairs.add(pairKey);
+
+                        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        line.setAttribute('class', 'neural-line');
+                        linesSvg.appendChild(line);
+                        lineEntries.push({
+                            key: pairKey,
+                            source: node.id,
+                            target: targetId,
+                            el: line
+                        });
+                    });
+                });
+            }
+
+            function getArenaPointer(event) {
+                const source = event.touches ? (event.touches[0] || event.changedTouches[0]) : event;
+                const rect = arena.getBoundingClientRect();
+                return {
+                    x: source.clientX - rect.left,
+                    y: source.clientY - rect.top
+                };
+            }
+
+            function clampBody(body) {
+                const halfWidth = body.width / 2;
+                const halfHeight = body.height / 2;
+                body.x = Math.min(state.width - halfWidth, Math.max(halfWidth, body.x));
+                body.y = Math.min(state.height - halfHeight, Math.max(halfHeight, body.y));
+            }
+
+            function updateNodePosition(body) {
+                body.el.style.left = `${body.x}px`;
+                body.el.style.top = `${body.y}px`;
+            }
+
+            function measureArena(forceInitial = false) {
+                const previousWidth = state.width || Math.max(arena.clientWidth, 1);
+                const previousHeight = state.height || Math.max(arena.clientHeight, 1);
+                state.width = Math.max(arena.clientWidth, 1);
+                state.height = Math.max(arena.clientHeight, 1);
+
+                linesSvg.setAttribute('viewBox', `0 0 ${state.width} ${state.height}`);
+                linesSvg.setAttribute('width', state.width);
+                linesSvg.setAttribute('height', state.height);
+
+                nodeBodies.forEach((body) => {
+                    body.width = body.el.offsetWidth;
+                    body.height = body.el.offsetHeight;
+
+                    if (forceInitial || !body.initialized) {
+                        const start = layout[body.id] || { x: 50, y: 50 };
+                        body.x = (start.x / 100) * state.width;
+                        body.y = (start.y / 100) * state.height;
+                        body.vx = 0;
+                        body.vy = 0;
+                        body.initialized = true;
+                    } else {
+                        body.x = (body.x / previousWidth) * state.width;
+                        body.y = (body.y / previousHeight) * state.height;
+                    }
+
+                    clampBody(body);
+                    updateNodePosition(body);
+                });
+
+                updateLines();
+            }
+
+            function updateLines() {
+                lineEntries.forEach((entry) => {
+                    const source = nodeBodies.get(entry.source);
+                    const target = nodeBodies.get(entry.target);
+                    if (!source || !target) return;
+
+                    entry.el.setAttribute('x1', source.x);
+                    entry.el.setAttribute('y1', source.y);
+                    entry.el.setAttribute('x2', target.x);
+                    entry.el.setAttribute('y2', target.y);
+                    entry.el.classList.toggle('active', !!state.selectedId && (entry.source === state.selectedId || entry.target === state.selectedId));
+                });
+            }
+
+            function renderSelection() {
+                nodeBodies.forEach((body) => {
+                    body.el.classList.toggle('selected', body.id === state.selectedId);
+                });
+
+                if (!state.selectedId) {
+                    detailPlaceholder.style.display = 'flex';
+                    detailContent.style.display = 'none';
+                    detailTitle.textContent = '';
+                    detailList.innerHTML = '';
+                    updateLines();
+                    return;
+                }
+
+                const selected = nodeBodies.get(state.selectedId);
+                if (!selected) {
+                    state.selectedId = null;
+                    renderSelection();
+                    return;
+                }
+
+                detailTitle.innerHTML = `<img class="neural-node-icon" src="${selected.data.icon}" alt="" style="width:1.4rem;height:1.4rem;vertical-align:middle;margin-right:0.4rem" /> ${selected.data.label}`;
+                detailList.innerHTML = selected.data.description.map((item) => `<li>${item}</li>`).join('');
+                detailPlaceholder.style.display = 'none';
+                detailContent.style.display = 'block';
+                updateLines();
+            }
+
+            function setSelected(id) {
+                state.selectedId = state.selectedId === id ? null : id;
+                renderSelection();
+            }
+
+            function resolveVelocity(u1, u2) {
+                return [
+                    (((1 - RESTITUTION) * u1) + ((1 + RESTITUTION) * u2)) / 2,
+                    (((1 + RESTITUTION) * u1) + ((1 - RESTITUTION) * u2)) / 2
+                ];
+            }
+
+            function applyConnectionForces(dt) {
+                lineEntries.forEach((entry) => {
+                    const source = nodeBodies.get(entry.source);
+                    const target = nodeBodies.get(entry.target);
+                    if (!source || !target) return;
+
+                    // Skip forces on the node being dragged — prevents tug-of-war jitter
+                    const draggingId = state.dragging ? state.dragging.body.id : null;
+
+                    const dx = target.x - source.x;
+                    const dy = target.y - source.y;
+                    const distance = Math.hypot(dx, dy) || 0.0001;
+                    const nx = dx / distance;
+                    const ny = dy / distance;
+
+                    if (distance > REST_LENGTH) {
+                        const force = SPRING_K * (distance - REST_LENGTH) * dt;
+                        if (source.id !== draggingId) { source.vx += force * nx; source.vy += force * ny; }
+                        if (target.id !== draggingId) { target.vx -= force * nx; target.vy -= force * ny; }
+                    } else if (distance < MIN_DISTANCE) {
+                        const force = REPULSION_K * ((MIN_DISTANCE - distance) / MIN_DISTANCE) * dt;
+                        if (source.id !== draggingId) { source.vx -= force * nx; source.vy -= force * ny; }
+                        if (target.id !== draggingId) { target.vx += force * nx; target.vy += force * ny; }
+                    }
+                });
+            }
+
+            function applyDragForce(dt) {
+                if (!state.dragging) return;
+
+                const { body, pointer, offsetX, offsetY } = state.dragging;
+                const targetX = pointer.x - offsetX;
+                const targetY = pointer.y - offsetY;
+                const dx = targetX - body.x;
+                const dy = targetY - body.y;
+
+                // Critically-damped spring: stiff pull + heavy velocity kill
+                body.vx = body.vx * 0.6 + dx * DRAG_SPRING_K;
+                body.vy = body.vy * 0.6 + dy * DRAG_SPRING_K;
+            }
+
+            function applyDamping(dt) {
+                const damping = Math.pow(DAMPING, dt);
+                const draggingId = state.dragging ? state.dragging.body.id : null;
+                nodeBodies.forEach((body) => {
+                    if (body.id === draggingId) return; // drag spring handles its own damping
+                    body.vx *= damping;
+                    body.vy *= damping;
+                    // Snap to zero when near-still to avoid micro-jitter
+                    if (Math.abs(body.vx) < 0.01) body.vx = 0;
+                    if (Math.abs(body.vy) < 0.01) body.vy = 0;
+                });
+            }
+
+            function integrate(dt) {
+                nodeBodies.forEach((body) => {
+                    body.x += body.vx * dt;
+                    body.y += body.vy * dt;
+                });
+            }
+
+            function resolveNodeCollisions() {
+                const bodies = Array.from(nodeBodies.values());
+
+                for (let iteration = 0; iteration < 2; iteration += 1) {
+                    for (let i = 0; i < bodies.length; i += 1) {
+                        for (let j = i + 1; j < bodies.length; j += 1) {
+                            const a = bodies[i];
+                            const b = bodies[j];
+                            const dx = b.x - a.x;
+                            const dy = b.y - a.y;
+                            const overlapX = (a.width + b.width) / 2 - Math.abs(dx);
+                            const overlapY = (a.height + b.height) / 2 - Math.abs(dy);
+
+                            if (overlapX <= 0 || overlapY <= 0) continue;
+
+                            if (overlapX < overlapY) {
+                                const direction = dx >= 0 ? 1 : -1;
+                                const separation = overlapX / 2;
+                                a.x -= direction * separation;
+                                b.x += direction * separation;
+                                [a.vx, b.vx] = resolveVelocity(a.vx, b.vx);
+                            } else {
+                                const direction = dy >= 0 ? 1 : -1;
+                                const separation = overlapY / 2;
+                                a.y -= direction * separation;
+                                b.y += direction * separation;
+                                [a.vy, b.vy] = resolveVelocity(a.vy, b.vy);
+                            }
+
+                            clampBody(a);
+                            clampBody(b);
+                        }
+                    }
+                }
+            }
+
+            function resolveWallCollisions() {
+                nodeBodies.forEach((body) => {
+                    const halfWidth = body.width / 2;
+                    const halfHeight = body.height / 2;
+
+                    if (body.x - halfWidth < 0) {
+                        body.x = halfWidth;
+                        body.vx = Math.abs(body.vx) * RESTITUTION;
+                    } else if (body.x + halfWidth > state.width) {
+                        body.x = state.width - halfWidth;
+                        body.vx = -Math.abs(body.vx) * RESTITUTION;
+                    }
+
+                    if (body.y - halfHeight < 0) {
+                        body.y = halfHeight;
+                        body.vy = Math.abs(body.vy) * RESTITUTION;
+                    } else if (body.y + halfHeight > state.height) {
+                        body.y = state.height - halfHeight;
+                        body.vy = -Math.abs(body.vy) * RESTITUTION;
+                    }
+
+                    clampBody(body);
+                });
+            }
+
+            function tick(timestamp) {
+                if (!state.running) return;
+
+                const dt = state.lastTime ? Math.min(2, (timestamp - state.lastTime) / 16.6667) : 1;
+                state.lastTime = timestamp;
+
+                applyConnectionForces(dt);
+                applyDragForce(dt);
+                applyDamping(dt);
+                integrate(dt);
+                resolveNodeCollisions();
+                resolveWallCollisions();
+
+                nodeBodies.forEach((body) => {
+                    updateNodePosition(body);
+                });
+                updateLines();
+                state.rafId = window.requestAnimationFrame(tick);
+            }
+
+            function startLoop() {
+                if (!state.visible || state.running) return;
+                state.running = true;
+                state.lastTime = 0;
+                state.rafId = window.requestAnimationFrame(tick);
+            }
+
+            function stopLoop() {
+                state.running = false;
+                state.lastTime = 0;
+                if (state.rafId) {
+                    window.cancelAnimationFrame(state.rafId);
+                    state.rafId = 0;
+                }
+            }
+
+            function handlePointerDown(event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                const body = nodeBodies.get(event.currentTarget.dataset.id);
+                if (!body) return;
+
+                const pointer = getArenaPointer(event);
+                state.dragging = {
+                    body,
+                    captureEl: event.currentTarget,
+                    pointerId: event.pointerId,
+                    pointer,
+                    startX: pointer.x,
+                    startY: pointer.y,
+                    offsetX: pointer.x - body.x,
+                    offsetY: pointer.y - body.y,
+                    moved: false
+                };
+
+                body.el.classList.add('dragging');
+                arena.classList.add('dragging');
+
+                if (event.currentTarget.setPointerCapture) {
+                    event.currentTarget.setPointerCapture(event.pointerId);
+                }
+
+                startLoop();
+            }
+
+            function handlePointerMove(event) {
+                if (!state.dragging || event.pointerId !== state.dragging.pointerId) return;
+
+                const pointer = getArenaPointer(event);
+                state.dragging.pointer = pointer;
+
+                if (!state.dragging.moved) {
+                    const distance = Math.hypot(pointer.x - state.dragging.startX, pointer.y - state.dragging.startY);
+                    state.dragging.moved = distance > CLICK_THRESHOLD;
+                }
+            }
+
+            function clearDraggingState() {
+                if (!state.dragging) return null;
+
+                const dragState = state.dragging;
+                dragState.body.el.classList.remove('dragging');
+                arena.classList.remove('dragging');
+
+                if (dragState.captureEl?.releasePointerCapture && dragState.pointerId != null) {
+                    try {
+                        dragState.captureEl.releasePointerCapture(dragState.pointerId);
+                    } catch {
+                        // Ignore release failures from detached pointers.
+                    }
+                }
+
+                state.dragging = null;
+                return dragState;
+            }
+
+            function handlePointerUp(event) {
+                if (!state.dragging || event.pointerId !== state.dragging.pointerId) return;
+
+                const dragState = clearDraggingState();
+                if (!dragState) return;
+
+                if (!dragState.moved) {
+                    setSelected(dragState.body.id);
+                }
+            }
+
+            function handlePointerCancel(event) {
+                if (!state.dragging || event.pointerId !== state.dragging.pointerId) return;
+                clearDraggingState();
+            }
+
+            function handleArenaClick(event) {
+                const clickedNode = event.target.closest('.neural-node');
+                if (clickedNode || state.dragging) return;
+
+                if (state.selectedId !== null) {
+                    state.selectedId = null;
+                    renderSelection();
+                }
+            }
+
+            const resizeObserver = new ResizeObserver(() => {
+                measureArena(false);
+            });
+
+            const visibilityObserver = new IntersectionObserver((entries) => {
+                const [entry] = entries;
+                state.visible = !!entry && entry.isIntersecting;
+
+                if (state.visible) {
+                    measureArena(false);
+                    startLoop();
+                } else {
+                    stopLoop();
+                }
+            }, { threshold: 0.15 });
+
+            arena.addEventListener('click', handleArenaClick);
+            window.addEventListener('pointermove', handlePointerMove);
+            window.addEventListener('pointerup', handlePointerUp);
+            window.addEventListener('pointercancel', handlePointerCancel);
+            resizeObserver.observe(arena);
+            visibilityObserver.observe(skillsCard);
+            buildGraph();
+        })();
 
         // === Starfield & Constellations ===
         (() => {
@@ -2442,63 +3028,38 @@
             });
         })();
 
-        // === Cat Click Interactions ===
+        // === Cat Interaction System (powered by data/cat-dialogues.js) ===
         (() => {
             const cat = document.getElementById('catContainer');
             const bubble = document.getElementById('catBubble');
+            if (!cat || !bubble || typeof CAT_DIALOGUES === 'undefined') return;
+
+            const cfg = CAT_DIALOGUES;
             let clickCount = 0;
             let isAnimating = false;
             let bubbleTimer = null;
+            let idleTimer = null;
+            let lastHoverSelector = null;
+            const hoverHistory = new Map();
 
-            // Reaction pool
-            const reactions = [
-                { anim: 'cat-jump', duration: 900, emotes: ['💫','⭐','✨'], bubble: '喵~!' },
-                { anim: 'cat-jump', duration: 900, emotes: ['❤️','💕','💗'], bubble: '摸摸我~' },
-                { anim: 'cat-spin', duration: 1000, emotes: ['🌟','💫','✨'], bubble: '转转转!' },
-                { anim: 'cat-wiggle', duration: 800, emotes: ['😺','🐾','🐱'], bubble: '嘿嘿~' },
-                { anim: 'cat-squish', duration: 700, emotes: ['💛','😻','💕'], bubble: '好舒服~' },
-                { anim: 'cat-float-away', duration: 1200, emotes: ['☁️','💤','🌙'], bubble: '飘起来了~' },
-                { anim: 'cat-jump', duration: 900, emotes: ['🎵','🎶','🎵'], bubble: '~ ♪ ~' },
-                { anim: 'cat-wiggle', duration: 800, emotes: ['🐟','🐠','🐟'], bubble: '想吃鱼!' },
-                { anim: 'cat-squish', duration: 700, emotes: ['😸','✨','🌟'], bubble: '再来!' },
-                { anim: 'cat-spin', duration: 1000, emotes: ['🎮','🕹️','👾'], bubble: '一起玩吧!' },
-            ];
-
-            // Special reactions for click streaks
-            const streakReactions = [
-                null, null, null,
-                { anim: 'cat-spin', duration: 1000, emotes: ['🌈','⭐','💫','✨','🌟'], bubble: '好开心!!!' },
-                null,
-                { anim: 'cat-float-away', duration: 1200, emotes: ['🚀','⭐','💫','✨','🌟','🎆'], bubble: '要飞走啦~!!' },
-                null, null, null,
-                { anim: 'cat-spin', duration: 1200, emotes: ['🏆','👑','💎','⭐','🌟','✨','💫','🎉'], bubble: '你是最棒的!!!' },
-            ];
-
-            function showBubble(text) {
+            function showBubble(text, duration) {
                 bubble.textContent = text;
                 bubble.classList.add('show');
                 clearTimeout(bubbleTimer);
-                bubbleTimer = setTimeout(() => bubble.classList.remove('show'), 2000);
+                bubbleTimer = setTimeout(() => bubble.classList.remove('show'), duration || 2500);
             }
 
             function spawnEmote(emoji, index) {
                 const el = document.createElement('div');
                 el.className = 'cat-emote';
                 el.textContent = emoji;
-                // Randomize position around the cat top area
                 const angle = (Math.PI * 2 / 5) * index + (Math.random() - 0.5) * 0.8;
                 const hx = Math.cos(angle) * (20 + Math.random() * 25);
                 const sy = -30 - Math.random() * 50;
-                el.style.cssText = `
-                    left: 50%; top: 20%;
-                    --hx: ${hx}px; --sx: ${hx}px; --sy: ${sy}px;
-                    --nx: ${hx}px; --nx2: ${-hx * 0.5}px;
-                `;
-                // Pick random emote animation type
-                const animations = ['heart-float', 'star-burst', 'note-dance'];
-                const animName = animations[Math.floor(Math.random() * animations.length)];
-                el.style.animation = `${animName} ${0.8 + Math.random() * 0.6}s ease-out forwards`;
-                el.style.animationDelay = `${index * 0.08}s`;
+                el.style.cssText = `left:50%;top:20%;--hx:${hx}px;--sx:${hx}px;--sy:${sy}px;--nx:${hx}px;--nx2:${-hx*0.5}px;`;
+                const anims = ['heart-float','star-burst','note-dance'];
+                el.style.animation = `${anims[Math.floor(Math.random()*anims.length)]} ${0.8+Math.random()*0.6}s ease-out forwards`;
+                el.style.animationDelay = `${index*0.08}s`;
                 cat.appendChild(el);
                 setTimeout(() => el.remove(), 2000);
             }
@@ -2506,22 +3067,12 @@
             function playReaction(reaction) {
                 if (isAnimating) return;
                 isAnimating = true;
-
-                // Play animation
                 cat.style.animation = 'none';
-                // Force reflow
                 void cat.offsetHeight;
                 cat.style.animation = `${reaction.anim} ${reaction.duration}ms ease-out`;
-
-                // Spawn emotes
                 reaction.emotes.forEach((emoji, i) => { spawnEmote(emoji, i); });
-
-                // Show bubble
                 if (reaction.bubble) showBubble(reaction.bubble);
-
-                // Glow boost
                 cat.style.filter = 'drop-shadow(0 0 30px rgba(103, 177, 213, 0.7))';
-
                 setTimeout(() => {
                     cat.style.animation = 'cat-bob 3s ease-in-out infinite';
                     cat.style.filter = 'drop-shadow(0 0 20px rgba(103, 177, 213, 0.3))';
@@ -2529,27 +3080,76 @@
                 }, reaction.duration + 100);
             }
 
-            // Click streak reset timer
             let streakTimer = null;
-
             cat.addEventListener('click', (e) => {
-                e.stopPropagation(); // Don't trigger particle splash on cat
+                e.stopPropagation();
+                resetIdleTimer();
                 clickCount++;
-
-                // Reset streak after 3s of no clicks
                 clearTimeout(streakTimer);
                 streakTimer = setTimeout(() => { clickCount = 0; }, 3000);
-
-                // Check for streak reaction first
                 const streakIdx = clickCount - 1;
-                if (streakIdx < streakReactions.length && streakReactions[streakIdx]) {
-                    playReaction(streakReactions[streakIdx]);
+                if (cfg.streakReactions && streakIdx < cfg.streakReactions.length && cfg.streakReactions[streakIdx]) {
+                    playReaction(cfg.streakReactions[streakIdx]);
                     return;
                 }
+                const pool = cfg.clickReactions;
+                playReaction(pool[Math.floor(Math.random() * pool.length)]);
+            });
 
-                // Normal random reaction
-                const reaction = reactions[Math.floor(Math.random() * reactions.length)];
-                playReaction(reaction);
+            function pickLine(entry) {
+                const key = entry.selector;
+                if (!hoverHistory.has(key)) hoverHistory.set(key, []);
+                const used = hoverHistory.get(key);
+                if (used.length >= entry.lines.length) used.length = 0;
+                const available = entry.lines.filter((_, i) => !used.includes(i));
+                const idx = entry.lines.indexOf(available[Math.floor(Math.random() * available.length)]);
+                used.push(idx);
+                return entry.lines[idx];
+            }
+
+            if (cfg.hoverDialogues) {
+                cfg.hoverDialogues.forEach(entry => {
+                    document.querySelectorAll(entry.selector).forEach(el => {
+                        el.addEventListener('mouseenter', () => {
+                            if (isAnimating) return;
+                            if (lastHoverSelector === entry.selector) return;
+                            lastHoverSelector = entry.selector;
+                            resetIdleTimer();
+                            const line = pickLine(entry);
+                            showBubble(line, 3000);
+                            cat.style.animation = 'none';
+                            void cat.offsetHeight;
+                            cat.style.animation = 'cat-wiggle 400ms ease-out';
+                            setTimeout(() => {
+                                cat.style.animation = 'cat-bob 3s ease-in-out infinite';
+                            }, 420);
+                        });
+                        el.addEventListener('mouseleave', () => {
+                            lastHoverSelector = null;
+                        });
+                    });
+                });
+            }
+
+            function resetIdleTimer() {
+                clearTimeout(idleTimer);
+                if (!cfg.idleDialogues || !cfg.idleTimeout) return;
+                idleTimer = setTimeout(() => {
+                    if (isAnimating) return;
+                    const pool = cfg.idleDialogues;
+                    showBubble(pool[Math.floor(Math.random() * pool.length)], 3500);
+                    cat.style.animation = 'none';
+                    void cat.offsetHeight;
+                    cat.style.animation = 'cat-squish 600ms ease-out';
+                    setTimeout(() => {
+                        cat.style.animation = 'cat-bob 3s ease-in-out infinite';
+                    }, 620);
+                    resetIdleTimer();
+                }, cfg.idleTimeout + Math.random() * 10000);
+            }
+            resetIdleTimer();
+            ['mousemove','click','scroll','keydown'].forEach(evt => {
+                document.addEventListener(evt, resetIdleTimer, { passive: true });
             });
         })();
     </script>
